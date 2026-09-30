@@ -1,0 +1,80 @@
+AUTO TICKET CLASSIFICATION - FLOW DESIGNER LOGIC
+====================================================
+
+Platform: ServiceNow
+Flow Name: Auto Classify School IT Tickets
+Table: Incident Workflow
+Trigger: Record Created
+Trigger Condition: Category is empty
+
+CLASSIFICATION LOGIC
+--------------------
+
+1. WIFI / NETWORK
+   IF Short Description contains:
+      - Wi-Fi
+      - WiFi
+      - Network
+
+   UPDATE RECORD:
+      Category    = Network
+      Subcategory = Wi-Fi
+
+
+2. PROJECTOR / HARDWARE
+   ELSE IF Short Description contains:
+      - Projector
+      - Hardware
+
+   UPDATE RECORD:
+      Category    = Hardware
+      Subcategory = Projector
+
+
+3. PASSWORD / LOGIN
+   ELSE IF Short Description contains:
+      - Password
+      - Login
+      - Forgot password
+
+   UPDATE RECORD:
+      Category    = Access
+      Subcategory = Forgot Password
+
+
+4. SLOW COMPUTER
+   ELSE IF Short Description contains:
+      - Slow
+      - Hanging
+      - Slow Computer
+
+   UPDATE RECORD:
+      Category    = Performance
+      Subcategory = Slow Computer
+
+
+5. EMAIL NOTIFICATION
+   AFTER CLASSIFICATION:
+
+      Action: Send Email
+      To: Caller -> Email
+      Subject: Your Request for the issue has been submitted.
+      Body: Ticket confirmation message
+
+
+DEPENDENCY
+----------
+Category -> Subcategory
+
+Network     -> Wi-Fi
+Hardware    -> Projector
+Access      -> Forgot Password
+Performance -> Slow Computer
+
+
+IMPORTANT
+---------
+This file documents the no-code Flow Designer logic.
+It is NOT a ServiceNow import/update-set XML file.
+The actual Update Set XML must be exported from the configured
+ServiceNow instance.
